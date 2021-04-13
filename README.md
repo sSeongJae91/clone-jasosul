@@ -1,3 +1,6 @@
+### VSCODE Extensions
+- vscode-styled-components
+
 ### library
 
 #### react router
