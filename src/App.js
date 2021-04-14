@@ -1,5 +1,5 @@
-import react from 'react';
-import {Router} from 'react-router-dom';
+import React from 'react';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 import Header from './component/Header';
 import ChatTab from './component/ChatTab';
@@ -11,7 +11,7 @@ import Recruit from './pages/Recruit';
 import Resume from './pages/Resume';
 import MyInfo from './pages/MyInfo';
 import Clause from './pages/Clause';
-import Policy from './Pages/Policy';
+import Policy from './pages/Policy';
 import { AuthProvider } from './context/auth';
 
 function App() {
@@ -19,6 +19,7 @@ function App() {
     <AuthProvider>
       <Router>
         <Container/>
+        <Header/>
         <Route exact path='/' component={Home}/>
         <Route exact path='/recruit' component={Recruit}/>
         <Route exact path='/resume' component={Resume}/>
