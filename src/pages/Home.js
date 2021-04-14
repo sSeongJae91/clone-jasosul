@@ -1,6 +1,8 @@
 import React from 'react';
 
-function Home() {
+function Home({location, history}) {
+
+    console.log('@@@@@@@@@@@@@@@@', history);
 
     return (
         <></>

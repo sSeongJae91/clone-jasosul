@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 import Header from './component/Header';
 import ChatTab from './component/ChatTab';
+import Login from './component/popup/Login';
 
 import { createGlobalStyle } from 'styled-components';
 
@@ -15,11 +16,25 @@ import Policy from './pages/Policy';
 import { AuthProvider } from './context/auth';
 
 function App() {
+
+  const [loginPop, setLoginPop] = useState(false);
+  
+  const callbackFunc = useCallback((flag) => setLoginPop(flag));
+
   return (
     <AuthProvider>
       <Router>
         <Container/>
-        <Header/>
+        <Header callbackFunc={callbackFunc}/>
+        {loginPop ? (
+          <>
+            <Login/>
+          </>
+          ):(
+          <>
+
+          </>
+        )}
         <Route exact path='/' component={Home}/>
         <Route exact path='/recruit' component={Recruit}/>
         <Route exact path='/resume' component={Resume}/>

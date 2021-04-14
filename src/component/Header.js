@@ -1,7 +1,31 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { AuthContext } from '../context/auth';
 
-function Header() {
+function Header({callbackFunc}) {
+
+    const { user } = useContext(AuthContext);
+
+    function movePage(pageName) {
+        if(user) {
+            window.location.href='/' + pageName;
+        }else {
+            callbackFunc(true);
+        }
+    }
+
+    function datalabPage() {
+
+    }
+
+    function passresumePage() {
+
+    }
+
+    function exPage() {
+
+    }
+
     
     return (
         <HeaderStyle>
@@ -12,20 +36,29 @@ function Header() {
                     </a>
                 </div>
                 <div className="tab_center">
-                    <div className="tab_button recruit">채용 공고</div>
-                    <div className="tab_button resume">자기소개서</div>
-                    <div className="tab_button spec">이력서</div>
-                    <div className="tab_button datalab">데이터랩</div>
-                    <div className="tab_button passresume">합격자소서</div>
-                    <div className="tab_button">실무경험 채우기</div>
+                    <div className="tab_button recruit" onClick={movePage.bind('recruit')}>채용 공고</div>
+                    <div className="tab_button resume" onClick={movePage.bind('resume')}>자기소개서</div>
+                    <div className="tab_button spec" onClick={movePage.bind('spec')}>이력서</div>
+                    <div className="tab_button datalab" onClick={datalabPage}>데이터랩</div>
+                    <div className="tab_button passresume" onClick={passresumePage}>합격자소서</div>
+                    <div className="tab_button" onClick={exPage()}>실무경험 채우기</div>
                 </div>
                 <div className="tab_right">
-                    <div className="sign-in-button">
-                        로그인
-                    </div>
-                    <div className="business-link-button">
-                        <a>기업서비스</a>
-                    </div>
+                    {user ? (
+                    <>
+
+                    </>
+                    ):(
+                    <>
+                        <div className="sign-in-button">
+                            로그인
+                        </div>
+                        <div className="business-link-button">
+                            <a>기업서비스</a>
+                        </div>
+                    </>
+                    )}
+                    
                 </div>
             </div>
         </HeaderStyle>
