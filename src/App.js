@@ -16,24 +16,31 @@ import Policy from './pages/Policy';
 import { AuthProvider } from './context/auth';
 
 function App() {
-
+  
   const [loginPop, setLoginPop] = useState(false);
   
-  const callbackFunc = useCallback((flag) => setLoginPop(flag));
+  const callbackFunc = useCallback((flag) => {
+    setLoginPop(flag);
+  });
+
+  window.onclick = function(event) {
+    alert(event.target.className)
+      if (event.target.className == 'modal-dialog') {
+        setLoginPop(false);
+      }
+    }
 
   return (
     <AuthProvider>
       <Router>
-        <Container/>
+        <Container loginPop={loginPop}/>
         <Header callbackFunc={callbackFunc}/>
         {loginPop ? (
           <>
-            <Login/>
+            <Login className="loginPop"/>
           </>
           ):(
-          <>
-
-          </>
+          <></>
         )}
         <Route exact path='/' component={Home}/>
         <Route exact path='/recruit' component={Recruit}/>
@@ -57,7 +64,7 @@ const Container = createGlobalStyle`
     font-weight: 400px;
     font-size: 14px;
     line-height: 1rem;
-    background-color: #ffffff;
+    background-color: '#ffffff' ;
   }
 `;
 
