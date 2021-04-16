@@ -24,8 +24,11 @@ function App() {
   });
 
   window.onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    
     alert(event.target.className)
-      if (event.target.className == 'modal-dialog') {
+      if (event.target.className == 'modal-window') {
         setLoginPop(false);
       }
     }
@@ -65,6 +68,7 @@ const Container = createGlobalStyle`
     font-size: 14px;
     line-height: 1rem;
     background-color: '#ffffff' ;
+    margin: 0px;
   }
 `;
 
