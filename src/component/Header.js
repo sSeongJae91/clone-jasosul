@@ -7,6 +7,7 @@ function Header({callbackFunc}) {
     const { user } = useContext(AuthContext);
 
     function movePage(pageName, event) {
+        console.log(pageName, event);
         if(user) {
             window.location.href='/' + pageName;
         }else {
@@ -39,9 +40,9 @@ function Header({callbackFunc}) {
                     </a>
                 </div>
                 <div className="tab_center">
-                    <div className="tab_button recruit" onClick={movePage.bind('recruit', Event)}>채용 공고</div>
-                    <div className="tab_button resume" onClick={movePage.bind('resume', Event)}>자기소개서</div>
-                    <div className="tab_button spec" onClick={movePage.bind('spec', Event)}>이력서</div>
+                    <div className="tab_button recruit" onClick={(e) => movePage('recruit', e)}>채용 공고</div>
+                    <div className="tab_button resume" onClick={(e) => movePage('resume', e)}>자기소개서</div>
+                    <div className="tab_button spec" onClick={(e) => movePage('spec', e)}>이력서</div>
                     <div className="tab_button datalab" onClick={datalabPage}>데이터랩</div>
                     <div className="tab_button passresume" onClick={passresumePage}>합격자소서</div>
                     <div className="tab_button" onClick={exPage()}>실무경험 채우기</div>

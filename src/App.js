@@ -23,15 +23,9 @@ function App() {
     setLoginPop(flag);
   });
 
-  window.onclick = function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    
-    alert(event.target.className)
-      if (event.target.className == 'modal-window') {
-        setLoginPop(false);
-      }
-    }
+  const callbackPop = useCallback((flag) => {
+    setLoginPop(flag);
+  });
 
   return (
     <AuthProvider>
@@ -40,7 +34,7 @@ function App() {
         <Header callbackFunc={callbackFunc}/>
         {loginPop ? (
           <>
-            <Login className="loginPop"/>
+            <Login className="loginPop" callbackPop={callbackPop}/>
           </>
           ):(
           <></>
