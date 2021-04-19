@@ -143,7 +143,8 @@ const LoginStyle = styled.div`
     }
 
     .modal-window .modal-dialog {
-        /* transform: translate3d(0, 0, 0); */
+        transform: translate3d(0, 0, 0);
+        transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
         width: 340px;
         height: 555px;
         margin: 0;
@@ -183,7 +184,6 @@ const LoginStyle = styled.div`
     .sign-button {
         width: 50%;
         margin: 0 !important;
-        float: left !important;
         text-align: center;
         border: 0;
         height: 50px;
@@ -196,6 +196,7 @@ const LoginStyle = styled.div`
         cursor: pointer;
         text-decoration: none;
         border-radius: 4px;
+        display: inline-block;
     }
 
     .sign-button .sign-up {
@@ -330,6 +331,10 @@ const LoginStyle = styled.div`
         color: #fff;
         background: rgba(0,0,0,0.2);
         text-decoration: none;
+    }
+
+    *::before *::after {
+        box-sizing: border-box;
     }
 `
 ;
