@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 import Header from './component/Header';
@@ -13,11 +13,13 @@ import Resume from './pages/Resume';
 import MyInfo from './pages/MyInfo';
 import Clause from './pages/Clause';
 import Policy from './pages/Policy';
-import { AuthProvider } from './context/auth';
+import { AuthContext, AuthProvider } from './context/auth';
 
 function App() {
   
   const [loginPop, setLoginPop] = useState(false);
+
+  const {user} = useContext(AuthContext);
   
   const callbackFunc = useCallback((flag) => {
     setLoginPop(flag);
@@ -32,7 +34,7 @@ function App() {
       <Router>
         <Container loginPop={loginPop}/>
         <Header callbackFunc={callbackFunc}/>
-        {loginPop ? (
+        {loginPop && !user ? (
           <>
             <Login className="loginPop" callbackPop={callbackPop}/>
           </>

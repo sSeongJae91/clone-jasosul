@@ -1,11 +1,34 @@
-import React, { useState } from 'react';
+import { gql, useMutation } from '@apollo/client';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
+import { AuthContext } from '../../context/auth';
 
 function Login({callbackPop}) {
 
-    const [tabMode, setTabMode] = useState('1');
+    //사용자 정보 가져오기
+    const context = useContext(AuthContext);
+
+    const [tabMode, setTabMode] = useState('2');
     const [signUpClassName, setSignUpClassName] = useState('sign-button sign-up');
     const [loginClassName, setLoginClassName] = useState('sign-button sign-in active');
+    const [data, setData] = useState({
+        email: '',
+        password: ''
+    });
+
+    const [siginInData, setSignInData] = useState({
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
+
+    const onChange = (event) => {
+        setData({...data, [event.target.name]: event.target.value});
+    }
+
+    const onSiginInChange = (event) => {
+        setSignInData({...siginInData, [event.target.name]: event.target.value});
+    }
 
     function closeLoginPopup(e) {
 
@@ -38,6 +61,30 @@ function Login({callbackPop}) {
         }
     }
 
+    const [loginUser] = useMutation(LOGIN_USER, {
+        update(_, {data:{login:userData}}) {
+
+            context.login(userData);
+            window.location.href='/';
+        },
+        onError(err) {
+            console.log(err);
+            // alert(err.graphQLErrors[0].extensions.exception.errors);
+        },
+        variables: data
+    });
+
+    const [registUser] = useMutation(REGIST_USER, {
+        update(_, {data: {register: userData}}) {
+            context.login(userData);
+            window.location.href='/';
+        },
+        onError(err) {
+            console.log(err);
+        },
+        variables: siginInData
+    })
+
     return (
         <LoginStyle>
             <div className="modal-window" onClick={(e) => closeLoginPopup(e)}>
@@ -61,16 +108,16 @@ function Login({callbackPop}) {
                                                     SNS 계정으로 가입
                                                 </div>
                                                 <div>
-                                                    <div className="sign-type-sign-button sign-up-with-naver">
-                                                        <img src="https://jasoseol.com/assets/index/icon-naver-4a5102d8e6ad9a51ce2706bd02264fd51a595377c87179b2dc319246d19833b1.png"/>
+                                                    <div className="sign-type-sign-button sign-with-naver">
+                                                        <img src="https://jasoseol.com/assets/index/icon-naver-4a5102d8e6ad9a51ce2706bd02264fd51a595377c87179b2dc319246d19833b1.png" alt="naver"/>
                                                         네이버로 가입
                                                     </div>
-                                                    <div className="sign-type-sign-button sign-up-with-facebook">
-                                                        <img src="https://jasoseol.com/assets/index/icon-facebook-96289ffadc664e70ebad8677538f71262ebdffd0304f694891dd838a93b5dc51.png"/>
+                                                    <div className="sign-type-sign-button sign-with-facebook">
+                                                        <img src="https://jasoseol.com/assets/index/icon-facebook-96289ffadc664e70ebad8677538f71262ebdffd0304f694891dd838a93b5dc51.png" alt="facebook"/>
                                                         페이스북으로 가입
                                                     </div>
-                                                    <div className="sign-type-sign-button sign-up-with-apple">
-                                                    <img src="https://jasoseol.com/assets/index/icon-apple-white-f438bd15a193e358d98393973b5ac11e3b40e11adcc2ca758ccdd2b54a8a07b9.png"/>
+                                                    <div className="sign-type-sign-button sign-with-apple">
+                                                    <img src="https://jasoseol.com/assets/index/icon-apple-white-f438bd15a193e358d98393973b5ac11e3b40e11adcc2ca758ccdd2b54a8a07b9.png" alt="apple"/>
                                                         Apple로 가입
                                                     </div>
                                                 </div>
@@ -80,9 +127,9 @@ function Login({callbackPop}) {
                                                     이메일 주소로 가입
                                                 </div>
                                                 <div className="sign-type-email-inputs">
-                                                    <input type="email" placeholder="이메일"/>
-                                                    <input type="password" placeholder="비밀번호"/>
-                                                    <input type="password" placeholder="비밀번호 재입력"/>
+                                                    <input type="email" placeholder="이메일" name="email" value={siginInData.email} onChange={onSiginInChange}/>
+                                                    <input type="password" placeholder="비밀번호" name="password" value={siginInData.password} onChange={onSiginInChange}/>
+                                                    <input type="password" placeholder="비밀번호 재입력" name="confirmPassword" value={siginInData.confirmPassword} onChange={onSiginInChange}/>
                                                 </div>
                                                 <div className="agree-terms">
                                                     회원가입 시
@@ -91,20 +138,58 @@ function Login({callbackPop}) {
                                                     </strong>
                                                     에 동의하게 됩니다.
                                                 </div>
-                                                <div className="sign-type-sign-button sign-up-with-email">
-                                                    <img src="https://jasoseol.com/assets/index/mail_icon@2x-b9ad3010f6c25fcc0af0729e002024937a5c1f9d3f02d911ad8d648839de5384.png"/>
+                                                <div className="sign-type-sign-button sign-up-with-email" onClick={registUser}>
+                                                    <img src="https://jasoseol.com/assets/index/mail_icon@2x-b9ad3010f6c25fcc0af0729e002024937a5c1f9d3f02d911ad8d648839de5384.png" alt="email"/>
                                                     이메일로 가입
                                                 </div>
                                             </div>
                                         </div>
                                     ):(
-                                        <></>
+                                        <div className="signin-form">
+                                            <div className="sign-type-container sign-type-social-media">
+                                                <div className="sign-type-title">
+                                                    SNS 계정으로 로그인
+                                                </div>
+                                                <div>
+                                                    <div className="sign-type-sign-button sign-with-naver">
+                                                        <img src="https://jasoseol.com/assets/index/icon-naver-4a5102d8e6ad9a51ce2706bd02264fd51a595377c87179b2dc319246d19833b1.png" alt="naver"/>
+                                                        네이버로 로그인
+                                                    </div>
+                                                    <div className="sign-type-sign-button sign-with-facebook">
+                                                        <img src="https://jasoseol.com/assets/index/icon-facebook-96289ffadc664e70ebad8677538f71262ebdffd0304f694891dd838a93b5dc51.png" alt="facebook"/>
+                                                        페이스북으로 로그인
+                                                    </div>
+                                                    <div className="sign-type-sign-button sign-with-apple">
+                                                    <img src="https://jasoseol.com/assets/index/icon-apple-white-f438bd15a193e358d98393973b5ac11e3b40e11adcc2ca758ccdd2b54a8a07b9.png" alt="apple"/>
+                                                        Apple로 로그인
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="sign-type-container sign-type-email">
+                                                <div className="sign-type-email">
+                                                    <div className="sign-type-title">
+                                                        이메일 주소로 로그인
+                                                    </div>
+                                                    <div className="sign-type-email-inputs">
+                                                        <input type="email" name="email" value={data.email} onChange={onChange} placeholder="이메일"/>
+                                                        <input type="password" name="password" value={data.password} onChange={onChange} placeholder="비밀번호"/>
+                                                    </div>
+                                                    <div className="find-password">
+                                                        <a target="_self" href="/usres/password/new">비밀번호 찾기</a>
+                                                    </div>
+                                                    <div className="sign-type-sign-button sign-in-with-email" onClick={loginUser}>
+                                                        <img src="https://jasoseol.com/assets/index/mail_icon@2x-b9ad3010f6c25fcc0af0729e002024937a5c1f9d3f02d911ad8d648839de5384.png" alt="email"/>
+                                                        이메일로 로그인
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     )}
                                 </div>
                                 {tabMode ==='1'? (
                                     <a className="business-sign-link" href="/business_user/sign-up">기업 회원 가입</a>
                                 ):(
-                                    <a className="business-gisn-link" href="/business_user/sign-in">기업 회원 로그인</a>
+                                    <a className="business-sign-link" href="/business_user/sign-in">기업 회원 로그인</a>
                                 )}
                             </div>
                         </div>
@@ -114,6 +199,40 @@ function Login({callbackPop}) {
         </LoginStyle>
     )
 }
+
+const LOGIN_USER = gql
+`
+    mutation login(
+        $email: String!
+        $password: String!
+    ){
+        login (
+            email:$email
+            password:$password
+        ) {
+            id email username createdAt token
+        }
+    }
+`;
+
+const REGIST_USER = gql
+`
+    mutation register(
+        $email: String!
+        $password: String!
+        $confirmPassword: String!
+    ) {
+        register (
+            registerInput: {
+                email: $email
+                password: $password
+                confirmPassword: $confirmPassword
+            }
+        ){
+            id email createdAt token
+        }
+    }
+`;
 
 const LoginStyle = styled.div`
     .modal-window {
@@ -238,11 +357,7 @@ const LoginStyle = styled.div`
         width: 340px;
     }
 
-    .sign-up-form div {
-        color: #999;
-    }
-
-    .sign-up-form .sign-type-social-media {
+    .sign-type-social-media {
         margin-top: 10px;
     }
 
@@ -275,20 +390,20 @@ const LoginStyle = styled.div`
         margin-bottom: 0px;
     }
 
-    .sign-up-form .sign-up-with-naver{
+    .sign-with-naver{
         background: #2cc622;
         color: #fff;
         border: 0;
         padding-left: 60px;
     }
 
-    .sign-up-form .sign-up-with-facebook{
+    .sign-with-facebook{
         background: #3b579d;
         color: #fff;
         border: 0;
     }
 
-    .sign-up-form .sign-up-with-apple{
+    .sign-with-apple{
         background: black;
         color: white;
         border: none;
@@ -330,6 +445,16 @@ const LoginStyle = styled.div`
         border-radius: 3px;
         color: #fff;
         background: rgba(0,0,0,0.2);
+        text-decoration: none;
+    }
+
+    .signin-form .find-password {
+        text-align: center;
+        font-size: 12px;
+    }
+
+    .signin-form .find-password a{
+        color: #999;
         text-decoration: none;
     }
 
