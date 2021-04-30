@@ -20,3 +20,7 @@ $ npm install jwt-decode
 
 #### apollo-link-context
 $ npm install apollo-link-context
+
+### material ui
+$ npm install @material-ui/core
+$ npm install @material-ui/icons
