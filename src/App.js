@@ -41,12 +41,12 @@ function App() {
           ):(
           <></>
         )}
-        <Route exact path='/' component={Home}/>
         <Route exact path='/recruit' component={Recruit}/>
         <Route exact path='/resume' component={Resume}/>
         <Route exact path='/user' component={MyInfo}/>
         <Route exact path='/clause' component={Clause}/>
         <Route exact path='/policy' component={Policy}/>
+        <Route exact path='/' component={Home}/>
       </Router>
     </AuthProvider>
   );
