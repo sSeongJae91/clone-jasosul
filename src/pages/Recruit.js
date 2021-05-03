@@ -9,30 +9,33 @@ function Recruit() {
         getFirstDay: (yy, mm) => new Date(yy, mm, 1),
         getLastDay: (yy, mm) => new Date(yy, mm+1, 0),
         nextMonth: function() {
-            this.curDate = new Date(this.curDate.getFullYear, this.curDate.getMonth+1);
+            let nextDate = new Date(this.curDate.getFullYear, this.curDate.getMonth+1);
+            this.getCalBody(nextDate);
+            this.curDate = nextDate;
 
-            return this.curDate;
+            return nextDate;
         },
         prevMonth: function() {
-            this.curDate = new Date(this.curDate.getFullYear, this.curDate.getMonth-1);
+            let prevDate = new Date(this.curDate.getFullYear, this.curDate.getMonth-1);
+            this.getCalBody(prevDate);
+            this.curDate = prevDate;
             
-            return this.curDate;
+            return prevDate;
         },
-        getCalBody: function() {
+        getCalBody: function(date) {
             let trtd = '';
             let countDay = 0;
 
-            const year = this.curDate.getFullYear();
-            const month = this.curDate.getMonth();
+            const year = date.getFullYear();
+            const month = date.getMonth();
+
+            const prevMonLastDay = this.getLastDay(year, month-1, 0);
+            const lastDay = this.getLastDay(year, month, 0);
 
             for(let i=0; i<6; i++) {
                 trtd += '<tr>';
                 for(let j=0; j<7; j++) {
-                    const prevMonLastDay = this.getLastDay(year, month-1, 0);
-                    const lastDay = this.getLastDay(year, month, 0);
-
                     trtd += '<td>';
-
                     if(countDay === 0 && j <= prevMonLastDay.getDay()) {
                         trtd += prevMonLastDay.getDate() - prevMonLastDay.getDay() + j;
                     }else if(lastDay.getDate() <= countDay) {
@@ -41,7 +44,6 @@ function Recruit() {
                         countDay += 1;
                         trtd += countDay;
                     }
-
                     trtd += '</td>';
                 }
                 trtd += '</tr>';
@@ -72,7 +74,7 @@ function Recruit() {
                         <th>{date.dayList[6]}</th>
                     </tr>
                 </thead>
-                {date.getCalBody()}
+                {date.getCalBody(date.curDate)}
             </table>
         </div>
         </>
