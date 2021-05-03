@@ -13,7 +13,11 @@ function Resume() {
 
     const {user} = useContext(AuthContext);
 
-    const name = user.email.substring(0, user.email.indexOf('@'));
+    let name ='';
+
+    if(user) {
+         name = user.email.substring(0, user.email.indexOf('@'));
+    }
 
     const dropDown = React.createRef();
     const dropDownView = React.createRef();
