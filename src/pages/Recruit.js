@@ -3,47 +3,43 @@ import React from 'react';
 function Recruit() {
 
     const date = {
-        today : new Date(),
+        curDate : new Date(),
         dayList: ['SUN', 'MON', 'TUE', 'WED', 'THR', 'FRI', 'SAT'],
         curMonth: new Date().getMonth(),
         getFirstDay: (yy, mm) => new Date(yy, mm, 1),
         getLastDay: (yy, mm) => new Date(yy, mm+1, 0),
         nextMonth: function() {
-            let nm = new Date();
-            nm.setDate(1);
-            nm.setMonth(++curMonth);
+            this.curDate = new Date(this.curDate.getFullYear, this.curDate.getMonth+1);
 
-            return nm;
+            return this.curDate;
         },
         prevMonth: function() {
-            let pm = new Date();
-            pm.setDate(1);
-            pm.setMonth(--curMonth);
+            this.curDate = new Date(this.curDate.getFullYear, this.curDate.getMonth-1);
             
-            return pm;
+            return this.curDate;
         },
         getCalBody: function() {
             let trtd = '';
             let countDay = 0;
+
+            const year = this.curDate.getFullYear();
+            const month = this.curDate.getMonth();
+
             for(let i=0; i<6; i++) {
                 trtd += '<tr>';
                 for(let j=0; j<7; j++) {
-                    const year = this.today.getFullYear();
-                    const month = this.today.getMonth();
-
+                    const prevMonLastDay = this.getLastDay(year, month-1, 0);
                     const lastDay = this.getLastDay(year, month, 0);
-
-                    getLas
 
                     trtd += '<td>';
 
-                    if(countDay === 0 && j < lastDay.getDay()) {
-                        trtd += lastDay - lastDay.getDay();
-                    }else if(j === lastDay.getDay) {
-                        countDay = 1;
-                        trtd += countDay;
+                    if(countDay === 0 && j <= prevMonLastDay.getDay()) {
+                        trtd += prevMonLastDay.getDate() - prevMonLastDay.getDay() + j;
+                    }else if(lastDay.getDate() <= countDay) {
+                        trtd += j - lastDay.getDay();
                     }else {
-                        
+                        countDay += 1;
+                        trtd += countDay;
                     }
 
                     trtd += '</td>';
@@ -51,31 +47,35 @@ function Recruit() {
                 trtd += '</tr>';
             }
 
-            return trtd;
+            return <tbody dangerouslySetInnerHTML={{__html: trtd}}></tbody>;
         }
     }
 
     
 
     return (
+        <>
+        <div>sdfsdf</div>
+        <div>sdfsdf</div>
+        <div>sdfsdf</div>
+        <div>sdfsdf</div>
         <div>
-            <table style="border='1'">
+            <table>
                 <thead>
                     <tr>
-                        <th>{date.dayList(0)}</th>
-                        <th>{date.dayList(1)}</th>
-                        <th>{date.dayList(2)}</th>
-                        <th>{date.dayList(3)}</th>
-                        <th>{date.dayList(4)}</th>
-                        <th>{date.dayList(5)}</th>
-                        <th>{date.dayList(6)}</th>
+                        <th>{date.dayList[0]}</th>
+                        <th>{date.dayList[1]}</th>
+                        <th>{date.dayList[2]}</th>
+                        <th>{date.dayList[3]}</th>
+                        <th>{date.dayList[4]}</th>
+                        <th>{date.dayList[5]}</th>
+                        <th>{date.dayList[6]}</th>
                     </tr>
                 </thead>
-                <tbody className="cal-body">
-                    {getCalBody}
-                </tbody>
+                {date.getCalBody()}
             </table>
         </div>
+        </>
     )
 }
 
